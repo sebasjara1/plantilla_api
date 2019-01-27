@@ -2,8 +2,6 @@
 
 // Framework para el servidor
 const express = require('express');
-// Complmento para trabajar con tokens
-const jwt = require('jsonwebtoken');
 // Complem. para convertir peticiones en JSON
 const bodyParser = require('body-parser');
 
