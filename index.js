@@ -25,6 +25,7 @@ app.use(bodyParser.json());
 
 // Consultar todos los registros
 app.get('/api/products', (req, res) => {
+    // Método find acepta condiciones de busqueda mediante {}. 
     Product.find({}, (err, products) => {
         if(err) return res.status(500).send({ message: `Error en la petición: ${err}`});
         if(!products) return res.status(404).send({ message: 'El producto no existe' });
@@ -80,11 +81,36 @@ app.post('/api/products', (req, res) => {
 });
 
 app.put('/api/products/:productId', (req, res) => {
+    // Asignar variable desde parémetro de la URL
+    let productId = req.params.productId;
+    // Objeto los campos para actualizar
+    let update = req.body;
 
+    // Buscar registro por su ID y actualizarlo, { new: true } permite devolver el nuevo registro
+    Product.findByIdAndUpdate(productId, update, { new: true }, (err, product) => {
+        if(err) return res.status(500).send({ message: `Error al actualizar: ${err}` });
+        if(!product) return res.status(404).send({ message: 'No exite el producto a actualizar' });
+
+        // { product } en ES6 = { product: product }
+        return res.status(200).send({ product });
+    });
 });
 
 app.delete('/api/products/:productId', (req, res) => {
+    // Asignar variable desde parémetro de la URL
+    let productId = req.params.productId;
 
+    // Buscar registro por su ID y removerlo
+    Product.findByIdAndRemove(productId, (err, product) => {
+        if(err) return res.status(500).send({ message: `Error al borrar el producto: ${err}`});
+        if(!product) return res.status(404).send({ message: 'El producto no existe' });
+
+        // { product } en ES6 = { product: product }
+        res.status(200).send({ 
+            message: 'El producto ha sido eliminado',
+            product: product
+        });
+    });
 });
 
 //Conexión a MongoDB mediante una promesa
