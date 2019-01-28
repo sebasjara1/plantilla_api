@@ -17,10 +17,12 @@ const UserSchema = Schema({
     lastLogin: Date
 });
 
-// Middleware del modelo para encriptar contraseña antes de enviar a la DB
+// Método del modelo para realizar una acción antes de un evento, en este caso guardar. 
 UserSchema.pre('save', function(next) {
-    if(!this.isModified('password')) return next();
 
+    if(!this.isModified('password')) return next();
+    
+    //Encriptar contraseña antes de enviar a la DB 
     bcrypt.genSalt(10, (err, salt) => {
         if (err) return next(err);
 
@@ -33,13 +35,12 @@ UserSchema.pre('save', function(next) {
     });
 });
 
+// Método agregado al esquema para comparar contraseñas
 UserSchema.methods.comparePassword = function(candidatePassword, cb) {
     bcrypt.compare(candidatePassword, this.password, (err, isMatch) => {
         cb(err, isMatch);
     });
 }
-
-
 
 // Asignar esquema al modelo y exportarlo
 module.exports = mongoose.model('User', UserSchema);

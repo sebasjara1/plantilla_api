@@ -11,7 +11,7 @@ const app = express();
 /*---------------------IMPORTAR RUTAS---------------------*/
 const product_routes = require('./routing');
 
-/*---------------------MIDDLEWARES------------------------*/
+/*-----------------MIDDLEWARES GLOBALES-------------------*/
 // Configuración básica de body-parser
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());

@@ -7,7 +7,7 @@ const moment = require('moment');
 
 const config = require('../config');
 
-
+// Crear un token
 function createToken (user) {
     // Definición del Cuerpo del token
     const payload = {
@@ -22,11 +22,15 @@ function createToken (user) {
     return jwt.encode(payload, config.secret_token);
 }
 
+// Decodificar un token mediante una promesa
 function decodeToken(token){
+    // Creación de promesa
     const decoded = new Promise((resolve, reject) => {
         try {
+            // Recuperar el cuarpo del token
             const payload = jwt.decode(token, config.secret_token);
 
+            // Evaluar fecha de expiración
             if(payload.exp <= moment().unix()){
                 reject({
                     status: 401,
@@ -34,6 +38,7 @@ function decodeToken(token){
                 });
             }
 
+            // Retornar usuario registrado en el token
             resolve(payload.sub);
         } catch (err) {
             reject({
@@ -43,6 +48,7 @@ function decodeToken(token){
         }
     });
 
+    // Retornar promesa
     return decoded;
 }
 

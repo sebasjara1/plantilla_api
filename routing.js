@@ -2,9 +2,12 @@
 
 const express = require('express');
 
+// Controladores
 const ProductController = require('./controllers/product');
 const UserController = require('./controllers/user');
 
+// Middlewares
+// Autenticación con tokens
 const auth = require('./middlewares/auth');
 
 const router = express.Router();
@@ -25,7 +28,7 @@ router.delete('/products/:productId', ProductController.deleteProduct);
 router.post('/singup', UserController.signUp);
 // Logear usuario
 router.post('/singin', UserController.signIn);
-// Prueba ruta protegida
+// Ruta de prueba protegida
 router.get('/private', auth, (req, res) => {
     res.status(200).send({ message: 'Tienes acceso' });
 });
